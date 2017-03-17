@@ -52,7 +52,7 @@ public class DialogUtils {
      * @param titleRes
      * @param messageRes
      * @param cancelableOnTouchOutside
-     * @param message
+     * @param cancelCallback The callback that will be called if the progress dialog is cancelled.
      * @return
      */
     @NonNull
@@ -62,12 +62,14 @@ public class DialogUtils {
                                                                 boolean cancelableOnTouchOutside,
                                                                 Function<DialogInterface, Void> cancelCallback) {
 
-        ProgressDialog progressDialog = ProgressDialog.(context,
+        ProgressDialog progressDialog = ProgressDialog.show(context,
                 context.getResources().getString(titleRes),
                 context.getResources().getString(messageRes));
         progressDialog.setCancelable(true);
         progressDialog.setCanceledOnTouchOutside(cancelableOnTouchOutside);
         progressDialog.setOnCancelListener(dialog -> cancelCallback.apply(dialog));
+
+        return progressDialog;
     }
 
 
