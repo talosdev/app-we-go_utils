@@ -8,8 +8,6 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.annotation.StringRes;
 
-import java.util.function.Consumer;
-
 import static android.app.ProgressDialog.show;
 
 
@@ -60,17 +58,16 @@ public class DialogUtils {
                                                                 @StringRes int titleRes,
                                                                 @StringRes int messageRes,
                                                                 boolean cancelableOnTouchOutside,
-                                                                Consumer<DialogInterface> cancelCallback) {
+                                                                Runnable cancelCallback) {
 
         ProgressDialog progressDialog = ProgressDialog.show(context,
                 context.getResources().getString(titleRes),
                 context.getResources().getString(messageRes));
         progressDialog.setCancelable(true);
         progressDialog.setCanceledOnTouchOutside(cancelableOnTouchOutside);
-        progressDialog.setOnCancelListener(dialog -> cancelCallback.accept(dialog));
+        progressDialog.setOnCancelListener(dialog -> cancelCallback.run());
 
         return progressDialog;
-
     }
 
 
