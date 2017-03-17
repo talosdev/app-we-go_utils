@@ -8,6 +8,11 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.annotation.StringRes;
 
+import java.util.function.Function;
+
+import static android.app.ProgressDialog.show;
+
+
 /**
  * This class currently offers utility methods for creating progress and confirmation dialogs.
  */
@@ -31,10 +36,40 @@ public class DialogUtils {
                                                       @StringRes int titleRes,
                                                       @StringRes int messageRes) {
 
-        return ProgressDialog.show(context,
+        return show(context,
                 context.getResources().getString(titleRes),
                 context.getResources().getString(messageRes));
     }
+
+
+    /**
+     * Returns, but doesn't show, a cancelable progress dialog. The client code is responsible for
+     * calling {@link AlertDialog#show()}. The dialog can be cancelled with the back button, and 
+     * optionally, by clicking elsewhere on the screen, if the parameter <code>cancelableOnTouchOutside</code>
+     * is set.
+     *
+     * @param context
+     * @param titleRes
+     * @param messageRes
+     * @param cancelableOnTouchOutside
+     * @param message
+     * @return
+     */
+    @NonNull
+    public static ProgressDialog createCancelableProgressDialog(@NonNull Context context,
+                                                                @StringRes int titleRes,
+                                                                @StringRes int messageRes,
+                                                                boolean cancelableOnTouchOutside,
+                                                                Function<DialogInterface, Void> cancelCallback) {
+
+        ProgressDialog progressDialog = ProgressDialog.(context,
+                context.getResources().getString(titleRes),
+                context.getResources().getString(messageRes));
+        progressDialog.setCancelable(true);
+        progressDialog.setCanceledOnTouchOutside(cancelableOnTouchOutside);
+        progressDialog.setOnCancelListener(dialog -> cancelCallback.apply(dialog));
+    }
+
 
 
     public static void dismissNullSafe(ProgressDialog dialog) {
